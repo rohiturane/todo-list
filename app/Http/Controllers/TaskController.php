@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
+    protected $task;
+
+    public function __construct(Task $task) 
+    {
+        $this->task = $task;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::latest()->get();
+        return $this->task::latest()->get();
     }
 
     /**
@@ -42,7 +48,7 @@ class TaskController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()],500);
         }
-        return Task::create(['body'=>$request->input('body')]);
+        return $this->task->create(['body'=>$request->input('body')]);
     }
 
     /**
